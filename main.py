@@ -24,6 +24,7 @@ def parse_from_page(number):
         price = parse_price(article.find('span', class_='aajkfN wOOxir _0m5pni KVKCn3 ZkIJC- r9BRio').get_text().strip())
         # link = article.find('a')
         cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, price))
+        # wpisanie zmiennych do wartości
     db.commit()
 
 if len(argv) > 1 and argv[1] == 'setup':
