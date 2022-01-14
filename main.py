@@ -7,13 +7,13 @@ from sys import argv
 address = 'https://www.zalando.pl/mezczyzni-promocja/?sale=true'
 number = 1
 
-def parse_price(price):
-    return float(price.replace(' ', '').replace('zł','').replace(',', '.'))
-# funkcja do sformatowania ceny do floata
-
 db = sqlite3.connect('baza1.db')
 cursor=db.cursor()
 # stworzenie obiektu cursor
+
+def parse_price(price):
+    return float(price.replace(' ', '').replace('zł','').replace(',', '.'))
+# funkcja do sformatowania ceny do floata
 
 def parse_from_page(number):
     page = get(f'{address}&p={number}')  # zapytanie pobrania zawartości strony
