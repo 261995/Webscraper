@@ -34,14 +34,22 @@ if __name__ == '__main__':
 
 # Scrape url
 def parse_from_page():
+
     pageURL = 'https://www.zalando-lounge.pl/campaigns/ZZO1M4A/1'
+
+
     page = requests.get(pageURL)  # zapytanie pobrania zawartości strony
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
+    # print (bs)
 
-    print (bs)
 
-    title = bs.find_all(text='Kurtka')
-    # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, color, price))
+    title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ').[1]
+    firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
+    color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ').[2]
+    size = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ljhdMk").get_text()
+    price = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ixsQUL").get_text().strip().split('&').[1]
+
+    # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, price))
     # wpisanie zmiennych do wartości
 
     print("Title:")
@@ -51,7 +59,7 @@ def parse_from_page():
     # db.commit()
 
 if len(argv) > 1 and argv[1] == 'setup':
-    cursor.execute('''CREATE TABLE article (Item TEXT, Color TEXT, Price REAL)''')
+    cursor.execute('''CREATE TABLE article (Item TEXT, Firm TEXT, Color TEXT, Price REAL)''')
     # tworzenie tabeli zawierającej informacje o produktach
     quit()
 

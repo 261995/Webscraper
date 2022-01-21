@@ -2,7 +2,6 @@ import sqlite3
 # biblioteka dla baz danych
 from sys import argv
 import requests
-from lxml import html
 from bs4 import BeautifulSoup
 
 EMAIL = 'zal.user@mytrashemail.com'
@@ -50,7 +49,7 @@ def parse_from_page():
 
 
     title = bs.find_all(text='Kurtka')
-    # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, color, price))
+    # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, price))
     # wpisanie zmiennych do wartości
 
     print("Title:")
