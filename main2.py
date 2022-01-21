@@ -33,7 +33,6 @@ def main():
 
     response = requests.request("POST", url, data=payload, headers=headers)
 
-    print(response.text)
 
 if __name__ == '__main__':
     main()
@@ -45,16 +44,16 @@ def parse_from_page():
 
     page = requests.get(pageURL)  # zapytanie pobrania zawartości strony
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
-    # print (bs)
+    print (bs)
 
 
     title = bs.find_all(text='Kurtka')
     # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, price))
     # wpisanie zmiennych do wartości
 
-    print("Title:")
-    print(title)
-    print ('koniec funkcji')
+    # print("Title:")
+    # print(title)
+    # print ('koniec funkcji')
 
     # db.commit()
 
