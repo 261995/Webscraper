@@ -3,6 +3,8 @@ import sqlite3
 from sys import argv
 import requests
 from bs4 import BeautifulSoup
+from selenium.webdriver import Firefox
+from selenium.webdriver.firefox.options import Options
 
 EMAIL = 'zal.user@mytrashemail.com'
 PASSWORD = 'zal.user.1234'
@@ -17,51 +19,107 @@ cursor=db.cursor()
 # funkcja do sformatowania ceny do floata
 
 
-def main():
+class main():
+    def __init__(self):
+        URL = 'https://www.zalando-lounge.pl/event'
+        opts = Options()
+        opts.set_headless()
+        self.browser = Firefox(options=opts)
+        self.browser.get('https://www.zalando-lounge.pl/event')
 
-    url = "https://www.zalando-lounge.pl/campaigns/ZZO1M4A/1"
 
-    payload = {
-        "email": EMAIL,
-        "password": PASSWORD,
-    }
+        # Create payload
+        payload = {
+            "email": EMAIL,
+            "password": PASSWORD,
+        }
 
-    headers = {
-        "cookie": "zl_customer=eyJnZW5kZXIiOiIiLCJyb2xlIjoiZ3Vlc3QifQ%3D%3D; zl_deeplink=%2Fcampaigns%2FZZO1M4A%2F1; Zalando-Client-Id=b57cbb97-da5a-4ad8-a97b-9654b4cab7c9; _abck=4CD8171C2F80615EEC0A87B675A3496E~-1~YAAQf2ReaNWCd3h%2BAQAAdQ%2FAeQdi8O7nI9btBdIaYE3VK0ygrADiwrP%2FeB39uPV9nn5at0Q6bH3y6gHgtwGunDw0o984i1YR9F7kWYUDxkRl5EIaW1br65UMIYwvfs%2BeK4oCvQptnV3ZhEnBbvySsaALXbmbuBEfa0%2BFlEXyIp8IMz%2FHI7VQUvrKSFBWEPJ6gODeV1DdpBCyWk%2BfeJ4665B8T6qc6p6yn73hUiiM%2B4ptnlG8VWzpx2tAkbJOhCwTa2GRJJ9ToSEK7%2FW6r0vDWP2tLpCm2ZOWJgc7LZKN%2F95kJxeYoY2LNBBBdeM1xFs35FM%2FCW6GF1RulQ8RCfc0TiIi6FIYlWwJHwp6ZGS5zNo%2Fe5gBa7qEFYOZVVOYI6%2FOodZbyFq1ub%2FEO%2F6yAG8bPFSAzzcJw%2FioPybG%2Fxfp6xTttfI%3D~-1~-1~-1; zl_webviewos=; zl_webview_ga_cid=; zl_webview_ga_tid=; zl_webview_appversion=",
-        "Authorization": "Basic emFsLnVzZXJAbXl0cmFzaGVtYWlsLmNvbTp6YWwudXNlcjEyMzQ="
-    }
-
-    response = requests.request("POST", url, data=payload, headers=headers)
-
+        # Perform login
+        result = requests.Session().post(URL, data = payload)
 
 if __name__ == '__main__':
     main()
 
-def parse_from_page():
+# Scrape url
+def parse_from_page1():
 
-    pageURL = 'https://www.zalando-lounge.pl/campaigns/ZZO1M4A/1'
+    page1URL = 'https://www.zalando-lounge.pl/campaigns/ZZO1M4A/1'
 
 
-    page = requests.get(pageURL)  # zapytanie pobrania zawartości strony
+    page = requests.get(page1URL)  # zapytanie pobrania zawartości strony
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
-    print (bs)
+    # print (bs)
 
+    items = bs.find_all("ul", id="articleListWrapper")
+    title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
+    color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    size = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ljhdMk").get_text()
+    price = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ixsQUL").get_text().strip().split('&')
 
-    title = bs.find_all(text='Kurtka')
-    # cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, price))
+    cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, size, price))
     # wpisanie zmiennych do wartości
 
-    # print("Title:")
     # print(title)
-    # print ('koniec funkcji')
+    # print ('koniec parse')
 
-    # db.commit()
+    db.commit()
+
+def parse_from_page2():
+
+    page2URL = 'https://www.zalando-lounge.pl/campaigns/ZZO1KHB/1'
+
+
+    page = requests.get(page2URL)  # zapytanie pobrania zawartości strony
+    bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
+    # print (bs)
+
+    items = bs.find_all("ul", id="articleListWrapper")
+    title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
+    color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    size = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ljhdMk").get_text()
+    price = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ixsQUL").get_text().strip().split('&')
+
+    cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, size, price))
+    # wpisanie zmiennych do wartości
+
+    # print(title)
+    # print ('koniec parse')
+
+    db.commit()
+
+def parse_from_page3():
+
+    page3URL = 'https://www.zalando-lounge.pl/campaigns/ZZO1MAY/1'
+
+
+    page = requests.get(page3URL)  # zapytanie pobrania zawartości strony
+    bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
+    # print (bs)
+
+    items = bs.find_all("ul", id="articleListWrapper")
+    title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
+    color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
+    size = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ljhdMk").get_text()
+    price = bs.find_all("span", class_="styles__StyledText-cia9rt-0 ixsQUL").get_text().strip().split('&')
+
+    cursor.execute('INSERT INTO article VALUES (?, ?, ?)', (title, firm, color, size, price))
+    # wpisanie zmiennych do wartości
+
+    # print(title)
+    # print ('koniec parse')
+
+    db.commit()
 
 if len(argv) > 1 and argv[1] == 'setup':
-    cursor.execute('''CREATE TABLE article (Item TEXT, Firm TEXT, Color TEXT, Price REAL)''')
+    cursor.execute('''CREATE TABLE article (Item TEXT, Firm TEXT, Color TEXT, Size TEXT, Price REAL)''')
     # tworzenie tabeli zawierającej informacje o produktach
     quit()
 
-parse_from_page()
+parse_from_page1()
+parse_from_page2()
+parse_from_page3()
 
 db.close()

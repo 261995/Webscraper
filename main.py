@@ -42,7 +42,7 @@ def parse_from_page1():
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
     # print (bs)
 
-
+    items = bs.find_all("ul", id="articleListWrapper")
     title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
     firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
     color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
@@ -66,7 +66,7 @@ def parse_from_page2():
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
     # print (bs)
 
-
+    items = bs.find_all("ul", id="articleListWrapper")
     title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
     firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
     color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
@@ -90,7 +90,7 @@ def parse_from_page3():
     bs = BeautifulSoup(page.text, 'html.parser')  # pobranie zawartości zapytania
     # print (bs)
 
-
+    items = bs.find_all("ul", id="articleListWrapper")
     title = bs.find_all("div", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
     firm = bs.find_all("span", class_="articleName___uppercase___byJM8").get_text().strip()
     color = bs.find_all("span", class_="styles__StyledText-cia9rt-0 zUiGX").get_text().strip().split(' - ')
