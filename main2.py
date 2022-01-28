@@ -6,6 +6,10 @@ from bs4 import BeautifulSoup
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
 
+PATH = 'C:\Program Files (x86)\chromedriver.exe'
+driver = webdriver.CHROME(PATH)
+
+
 EMAIL = 'zal.user@mytrashemail.com'
 PASSWORD = 'zal.user.1234'
 
