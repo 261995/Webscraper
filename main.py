@@ -26,7 +26,7 @@ for page in range(1, pages + 1):
     page = requests.get(URL2).text  # zapytanie pobrania zawartości strony
     bs = BeautifulSoup(page, 'html.parser')  # pobranie zawartości zapytania
 
-    div = bs.find(class_='fchbrnone')
+    div = bs.find('div', class_='indent')
     items = div.find_all(text=re.compile(search))
 
     for item in div:
@@ -34,7 +34,9 @@ for page in range(1, pages + 1):
         if parent.name !='a':
             continue
         link = parent['href']
-        print(link)
+        next_parent = item.find_parent(class_='h2')
+        title = next_parent.find('title')
+        print(title)
 
 # tags = bs.find_all('a', class_='tag affect create')
 # print(tags)
