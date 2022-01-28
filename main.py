@@ -27,11 +27,14 @@ for page in range(1, pages + 1):
     bs = BeautifulSoup(page, 'html.parser')  # pobranie zawartości zapytania
 
     div = bs.find(class_='fchbrnone')
+    items = div.find_all(text=re.compile(search))
 
     for item in div:
         parent = item.parent
-        print (item)
-
+        if parent.name !='a':
+            continue
+        link = parent['href']
+        print(link)
 
 # tags = bs.find_all('a', class_='tag affect create')
 # print(tags)
